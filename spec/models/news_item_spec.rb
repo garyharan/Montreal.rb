@@ -21,4 +21,20 @@ RSpec.describe NewsItem, type: :model do
       expect(NewsItem.published).not_to include draft_item
     end
   end
+
+  describe "attribute validations" do
+    it "does not validate when 'authored' is not defined" do
+      news_item = NewsItem.new(author: nil)
+      expect(news_item).to be_invalid
+      expect(news_item.errors.messages.keys).to include :author
+    end
+  end
+
+  context "when a news_item is authored" do
+    it "knows about its author" do
+      author = create(:user)
+      news_item = create(:news_item, author: author)
+      expect(news_item.author).to eq author
+    end
+  end
 end
